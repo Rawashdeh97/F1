@@ -1,0 +1,197 @@
+/*int [] numbers = new int [6]{4,3,5,8,1,9};
+            Array.Sort(numbers);
+            for(int i = 0; i < 3; i++){
+            if (numbers[i] % 2 == 0){
+                int []even = new int []
+            }
+            Array.ForEach(numbers, Console.WriteLine);
+ -----------------------------------------------------------------------
+             int y;
+           //LeapYear obj = new LeapYear();
+           Console.WriteLine("Enter the Year in Four Digits : ");
+           string x = Console.ReadLine();
+           y = int.Parse(x); 
+
+           if((y % 4 == 0 && y % 100 != 0) || (y % 400 == 0))
+            {
+                Console.WriteLine("{0} is a Leap Year", y);
+            }
+            else
+            {
+                Console.WriteLine("{0} is not a Leap Year", y);
+            } 
+ */
+/*
+----------------------------------------------------------------------------
+Rectangle rect1;
+        rect1.length = 100;
+        rect1.width = 20;
+        Console.WriteLine("Area of rect1 {0}", rect1.Area());
+
+        Console.ReadLine();
+    }
+    struct Rectangle
+    {
+        public double length;
+        public double width;
+
+        public Rectangle(double l = 1, double w = 1)
+        {
+            width = w;
+            length = l;
+        }
+        public double Area() 
+        {
+            return length * width;
+        } */
+
+/*string uriName = Console.ReadLine();
+Uri uriResult;
+bool result = Uri.TryCreate(uriName, UriKind.Absolute, out uriResult)
+   && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
+   */
+
+/*  Console.WriteLine ("Welcome!");
+    Console.WriteLine ("Please enter the URL");
+    string name = "http://www.";
+    name += Console.ReadLine ();
+    string path = "";
+    Console.WriteLine ("choose a number: 1-(.com) 2-(.net) 3-(.org)");
+    int i = Convert.ToInt32 (Console.ReadLine ());
+    switch (i) {
+        case 1:
+            path = ".com";
+            break;
+
+        case 2:
+            path = ".net";
+            break;
+
+        case 3:
+            path = ".org";
+            break;
+
+        default:
+            Console.WriteLine ("No match found!");
+            break;
+    }
+
+    name += path;
+    string urlAddress = name;
+    Uri myUri = new Uri (name);
+    string host = myUri.Host;
+
+    HttpWebRequest request = (HttpWebRequest) WebRequest.Create (urlAddress);
+    HttpWebResponse response = (HttpWebResponse) request.GetResponse ();
+
+    if (response.StatusCode == HttpStatusCode.OK) {
+        Stream receiveStream = response.GetResponseStream ();
+        StreamReader readStream = null;
+
+        if (response.CharacterSet == null) {
+            readStream = new StreamReader (receiveStream);
+        } else {
+            readStream = new StreamReader (receiveStream, Encoding.GetEncoding (response.CharacterSet));
+        }
+
+        string data = readStream.ReadToEnd ();
+        Console.WriteLine ("------------------------CODE---------------------------");
+        Console.WriteLine (data);
+
+        response.Close ();
+        readStream.Close ();
+    }
+    Console.WriteLine ("Press Enter to exit or R to restart the program.");
+    string action = Console.ReadLine ();
+    if (action.ToUpper () == "R") {
+        Console.Clear ();
+        Main ();
+    }
+    Console.Read ();*/
+//**************************************************************************** */
+/* Console.WriteLine("Welcome!");
+    Console.WriteLine("Type in a word:");
+    string word_id = Console.ReadLine ();
+    const string lang_code = "en-gb";
+    const string fields = "pronunciations";
+    const string strictMatch = "false";
+    string WEBSERVICE_URL = "https://od-api.oxforddictionaries.com:443/api/v2/entries/" + lang_code + '/' + word_id + "?fields=" + fields + "&strictMatch=" + strictMatch;
+    try {
+        var webRequest = System.Net.WebRequest.Create (WEBSERVICE_URL);
+        if (webRequest != null) {
+            webRequest.Method = "GET";
+            webRequest.Timeout = 12000;
+            webRequest.ContentType = "application/json";
+            webRequest.Headers.Add ("app_id", "8f9123c6");
+            webRequest.Headers.Add ("app_key", "b137b9c929e843fb33bba167fcb818d7");
+
+            using (System.IO.Stream s = webRequest.GetResponse ().GetResponseStream ()) {
+                using (System.IO.StreamReader sr = new System.IO.StreamReader (s)) {
+                    var jsonResponse = sr.ReadToEnd ();
+                    Console.WriteLine (String.Format ("Response: {0}", jsonResponse));
+                }
+            }
+        }
+
+    } catch (Exception ex) {
+        Console.WriteLine (ex.ToString ());
+        
+    } */
+   /*  Console.WriteLine ("Welcome!");
+        Console.WriteLine ("Please enter the URL");
+        string name = "http://www.";
+        name += Console.ReadLine ();
+        string path = "";
+        Console.WriteLine ("choose a number: 1-(.com) 2-(.net) 3-(.org)");
+        int i = Convert.ToInt32 (Console.ReadLine ());
+        switch (i) {
+            case 1:
+                path = ".com";
+                break;
+
+            case 2:
+                path = ".net";
+                break;
+
+            case 3:
+                path = ".org";
+                break;
+
+            default:
+                Console.WriteLine ("No match found!");
+                break;
+        }
+
+        name += path;
+        string urlAddress = name;
+        Uri myUri = new Uri (name);
+        string host = myUri.Host;
+
+        HttpWebRequest request = (HttpWebRequest) WebRequest.Create (urlAddress);
+        HttpWebResponse response = (HttpWebResponse) request.GetResponse ();
+
+        if (response.StatusCode == HttpStatusCode.OK) {
+            Stream receiveStream = response.GetResponseStream ();
+            StreamReader readStream = null;
+
+            if (response.CharacterSet == null) {
+                readStream = new StreamReader (receiveStream);
+            } else {
+                readStream = new StreamReader (receiveStream, Encoding.GetEncoding (response.CharacterSet));
+            }
+
+            string data = readStream.ReadToEnd ();
+            Console.WriteLine ("------------------------CODE---------------------------");
+            Console.WriteLine (data);
+
+            response.Close ();
+            readStream.Close ();
+        }
+        Console.WriteLine ("Press Enter to exit or R to restart the program.");
+        string action = Console.ReadLine ();
+        if (action.ToUpper () == "R") {
+            Console.Clear ();
+            Main ();
+        }
+        Console.Read ();
+        */
