@@ -195,3 +195,145 @@ bool result = Uri.TryCreate(uriName, UriKind.Absolute, out uriResult)
         }
         Console.Read ();
         */
+        //*****create a new empty asset and put a video from a local file******** 
+        /*
+        using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.Azure.Management.Media;
+using Microsoft.Azure.Management.Media.Models;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Clients.ActiveDirectory;
+using Microsoft.Rest;
+using Microsoft.Rest.Azure.Authentication;
+using Microsoft.WindowsAzure.Storage.Blob;
+
+namespace ConsoleApp1 {
+    class Program {
+        private const string InputMP4FileName = @"C:\Users\admin\Desktop\codes\shahidMedia\sample11.mp4.mp4";
+        public static async Task Main (string[] args) {
+            ConfigWrapper config = new ConfigWrapper (new ConfigurationBuilder ()
+                .SetBasePath (Directory.GetCurrentDirectory ())
+                .AddJsonFile ("appsettings.json", optional : true, reloadOnChange : true)
+                .AddEnvironmentVariables ()
+                .Build ());
+            try {
+                await RunAsync (config);
+            } catch (Exception exception) {
+                if (exception.Source.Contains ("ActiveDirectory")) {
+                    Console.Error.WriteLine ("TIP: Make sure that you have filled out the appsettings.json file before running this sample.");
+                }
+
+                Console.Error.WriteLine ($"{exception.Message}");
+
+                ApiErrorException apiException = exception.GetBaseException () as ApiErrorException;
+                if (apiException != null) {
+                    Console.Error.WriteLine (
+                        $"ERROR: API call failed with error code '{apiException.Body.Error.Code}' and message '{apiException.Body.Error.Message}'.");
+                }
+            }
+            Console.WriteLine ("Press Enter to continue.");
+            Console.ReadLine ();
+        }
+        private static async Task RunAsync (ConfigWrapper config) {
+            IAzureMediaServicesClient client = await CreateMediaServicesClientAsync (config);
+
+            // Set the polling interval for long running operations to 2 seconds.
+            // The default value is 30 seconds for the .NET client SDK
+            client.LongRunningOperationRetryTimeout = 2;
+
+            // Creating a unique suffix so that we don't have name collisions if you run the sample
+            // multiple times without cleaning up.
+            string uniqueness = Guid.NewGuid ().ToString ("N");
+            string jobName = $"job-{uniqueness}";
+            string locatorName = $"locator-{uniqueness}";
+            //string outputAssetName = $"output-{uniqueness}";
+            string inputAssetName = $"input-{uniqueness}";
+
+            // Create a new input Asset and upload the specified local video file into it.
+            await CreateInputAssetAsync (client, config.ResourceGroup, config.AccountName, inputAssetName, InputMP4FileName);
+
+            // Use the name of the created input asset to create the job input.
+            JobInput jobInput = new JobInputAsset (assetName: inputAssetName);
+
+        }
+        private static async Task<Asset> CreateInputAssetAsync (
+            IAzureMediaServicesClient client,
+            string resourceGroupName,
+            string accountName,
+            string assetName,
+            string fileToUpload) {
+
+            Asset asset = await client.Assets.CreateOrUpdateAsync (resourceGroupName, accountName, assetName, new Asset ());
+
+            var response = await client.Assets.ListContainerSasAsync (
+                resourceGroupName,
+                accountName,
+                assetName,
+                permissions : AssetContainerPermission.ReadWrite,
+                expiryTime : DateTime.UtcNow.AddHours (4).ToUniversalTime ());
+
+            var sasUri = new Uri (response.AssetContainerSasUrls.First ());
+
+            // Use Storage API to get a reference to the Asset container
+            // that was created by calling Asset's CreateOrUpdate method.  
+            CloudBlobContainer container = new CloudBlobContainer (sasUri);
+            var blob = container.GetBlockBlobReference (Path.GetFileName (fileToUpload));
+
+            // Use Strorage API to upload the file into the container in storage.
+            await blob.UploadFromFileAsync (fileToUpload);
+
+            return asset;
+        }
+        private static async Task<IAzureMediaServicesClient> CreateMediaServicesClientAsync (ConfigWrapper config) {
+            var credentials = await GetCredentialsAsync (config);
+
+            return new AzureMediaServicesClient (config.ArmEndpoint, credentials) {
+                SubscriptionId = config.SubscriptionId,
+            };
+        }
+        private static async Task<Job> SubmitJobAsync (IAzureMediaServicesClient client,
+            string resourceGroupName,
+            string accountName,
+            string transformName,
+            string jobName,
+            string inputAssetName) {
+            // Use the name of the created input asset to create the job input.
+            JobInput jobInput = new JobInputAsset (assetName: inputAssetName);
+
+            JobOutput[] jobOutputs = {
+                new JobOutputAsset (inputAssetName),
+            };
+
+            // In this example, we are assuming that the job name is unique.
+            //
+            // If you already have a job with the desired name, use the Jobs.Get method
+            // to get the existing job. In Media Services v3, the Get method on entities returns null 
+            // if the entity doesn't exist (a case-insensitive check on the name).
+            Job job = await client.Jobs.CreateAsync (
+                resourceGroupName,
+                accountName,
+                transformName,
+                jobName,
+                new Job {
+                    Input = jobInput,
+                        Outputs = jobOutputs,
+                });
+
+            return job;
+        }
+        private static async Task<ServiceClientCredentials> GetCredentialsAsync (ConfigWrapper config) {
+            // Use ApplicationTokenProvider.LoginSilentWithCertificateAsync or UserTokenProvider.LoginSilentAsync to get a token using service principal with certificate
+            //// ClientAssertionCertificate
+            //// ApplicationTokenProvider.LoginSilentWithCertificateAsync
+
+            // Use ApplicationTokenProvider.LoginSilentAsync to get a token using a service principal with symetric key
+            ClientCredential clientCredential = new ClientCredential (config.AadClientId, config.AadSecret);
+            return await ApplicationTokenProvider.LoginSilentAsync (config.AadTenantId, clientCredential, ActiveDirectoryServiceSettings.Azure);
+        }
+    }
+}
+        */
